@@ -57,7 +57,9 @@ if (is_uploaded_file($_FILES["userfile"]["tmp_name"])) {
 				$thisfile = $thissize["file"];
 				if (strlen($thisfile)) {
 					$thisfile = $current_path . "/" . $thissize["file"];
-					unlink($thisfile);
+					if (file_exists($thisfile)) {
+						unlink($thisfile);
+					}
 				}
 			}
 			// Old (brutal) method, left here for now
@@ -94,7 +96,9 @@ if (is_uploaded_file($_FILES["userfile"]["tmp_name"])) {
 				$thisfile = $thissize["file"];
 				if (strlen($thisfile)) {
 					$thisfile = $current_path . "/" . $thissize["file"];
-					unlink($thisfile);
+					if (file_exists($thisfile)) {
+						unlink($thisfile);
+					}
 				}
 			}
 			// Old (brutal) method, left here for now

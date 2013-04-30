@@ -3,7 +3,7 @@
 Plugin Name: Enable Media Replace
 Plugin URI: http://www.mansjonasson.se/enable-media-replace
 Description: Enable replacing media files by uploading a new file in the "Edit Media" section of the WordPress Media Library.
-Version: 2.8.2
+Version: 2.9
 Author: Måns Jonasson
 Author URI: http://www.mansjonasson.se
 
@@ -28,6 +28,7 @@ Developed for .SE (Stiftelsen för Internetinfrastruktur) - http://www.iis.se
 add_action('admin_init', 'enable_media_replace_init');
 add_action('admin_menu', 'emr_menu');
 add_filter('attachment_fields_to_edit', 'enable_media_replace', 10, 2);
+add_filter('media_row_actions', 'add_media_action', 10, 2);
 
 add_shortcode('file_modified', 'emr_get_modified_date');
 
@@ -100,6 +101,24 @@ function emr_options() {
 		require_once($plugin_url . "upload.php");
 	}
 
+}
+
+/**
+ * Function called by filter 'media_row_actions'
+ * Enables linking to EMR straight from the media library
+*/
+function add_media_action( $actions, $post) {
+	$url = admin_url( "upload.php?page=enable-media-replace/enable-media-replace.php&action=media_replace&attachment_id=" . $post->ID);
+	$action = "media_replace";
+  	$editurl = wp_nonce_url( $url, $action );
+
+	if (FORCE_SSL_ADMIN) {
+		$editurl = str_replace("http:", "https:", $editurl);
+	}
+	$link = "href=\"$editurl\"";
+
+	$newaction['adddata'] = '<a ' . $link . ' title="' . __("Replace media", "enable-media-replace") . '" rel="permalink">' . __("Replace media", "enable-media-replace") . '</a>';
+	return array_merge($actions,$newaction);
 }
 
 /**

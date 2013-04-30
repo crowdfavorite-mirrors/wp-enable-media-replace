@@ -49,16 +49,19 @@ if (is_uploaded_file($_FILES["userfile"]["tmp_name"])) {
 		$suffix = substr($current_file, (strlen($current_file)-4));
 		$prefix = substr($current_file, 0, (strlen($current_file)-4));
 		$imgAr = array(".png", ".gif", ".jpg");
-		if (in_array($suffix, $imgAr)) {
+		if (in_array($suffix, $imgAr)) { 
+			// It's a png/gif/jpg based on file name
 			// Get thumbnail filenames from metadata
 			$metadata = wp_get_attachment_metadata($_POST["ID"]);
-			foreach($metadata["sizes"] AS $thissize) {
-				// Get all filenames and do an unlink() on each one;
-				$thisfile = $thissize["file"];
-				if (strlen($thisfile)) {
-					$thisfile = $current_path . "/" . $thissize["file"];
-					if (file_exists($thisfile)) {
-						unlink($thisfile);
+			if (is_array($metadata)) { // Added fix for error messages when there is no metadata (but WHY would there not be? I don't know…)
+				foreach($metadata["sizes"] AS $thissize) {
+					// Get all filenames and do an unlink() on each one;
+					$thisfile = $thissize["file"];
+					if (strlen($thisfile)) {
+						$thisfile = $current_path . "/" . $thissize["file"];
+						if (file_exists($thisfile)) {
+							unlink($thisfile);
+						}
 					}
 				}
 			}
@@ -151,6 +154,7 @@ if (is_uploaded_file($_FILES["userfile"]["tmp_name"])) {
 	}
 
 	$returnurl = get_bloginfo("wpurl") . "/wp-admin/upload.php?posted=3";
+	$returnurl = get_bloginfo("wpurl") . "/wp-admin/post.php?post={$_POST["ID"]}&action=edit&message=1";
 } else {
 	//TODO Better error handling when no file is selected.
 	//For now just go back to media management

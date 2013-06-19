@@ -31,11 +31,21 @@ This plugin is very powerful and a must-have for any larger sites built with Wor
 There is a shortcode available which picks up the file modification date and displays it in a post or a page. The code is:
 `[file_modified id=XX format=XXXX]` where the "id" is required and the "format" is optional and defaults to your current WordPress settings for date and time format. 
 
-So `[file_modified id=870]` would display the last time the file with ID 870 was updated on your site. To get the ID for a file, check the URL when editing a file in the media library (see screenshot #3)
+So `[file_modified id=870]` would display the last time the file with ID 870 was updated on your site. To get the ID for a file, check the URL when editing a file in the media library (see screenshot #4)
 
 If you want more control over the format used to display the time, you can use the format option, so `[file_modified id=870 format=Y-m-d]` would display the file modification date but not the time. The format string uses [standard PHP date() formatting tags](http://php.net/manual/en/function.date.php). 
 
 == Changelog ==
+
+= 2.9.2 = 
+* Small bug fix
+* Added hook for developers to enable purging possible CDN when updating files - thanks rubious for the suggestion!
+
+= 2.9.1 =
+* Added Brazilian Portuguese translation, thanks Roger Nobrega!
+* Added filter hook for file name creation, thanks to Jonas Lundman for the code!
+* Added modification date to the edit attachment screen, thanks to Jonas Lundman for the code!
+* Enhanced the deletion method for old file/image thumbnails to never give unnecessary error messages and more accurately delete orphaned thumbs
 
 = 2.9 =
 * Added Portuguese translation, thanks Bruno Miguel Bras Silva!
@@ -119,7 +129,7 @@ If you want more control over the format used to display the time, you can use t
 
 Quick and easy installation:
 
-1. Upload the folder `enable-media-replace` to the `/wp-content/plugins/` directory
+1. Upload the folder `enable-media-replace` to your plugin directory
 1. Activate the plugin through the 'Plugins' menu in WordPress
 1. Done!
 
@@ -133,11 +143,20 @@ This plugin makes it easy to update/replace files that have been uploaded to the
 
 A new option will be available in the Edit Media view, called "Replace Media". This is where you can upload a new file to replace the old one. 
 
+= I replaced a file, but it didn't change! =
+
+There are two main reasons this would happen.
+
+First, make sure you are not viewing a cached version of the file, especially if you replaced an image. Press "Refresh" in your browser to make sure. 
+
+Second, if the file really looks unchanged, make sure WordPress has write permissions to the files in your uploads folder. If you have ever moved your WP installation (maybe when you moved it to a new server), the permissions on your uploaded files are commonly reset so that WordPress no longer has permissions to change the files. If you don't know how to do this, contact your web server operator. 
+
 == Screenshots ==
 
-1. The new link in the WordPress Edit Media view.
-2. The upload window. 
-3. Get the file ID in the edit file URL
+1. The new link in the media library. 
+2. The replace media-button as seen in the "Edit media" view.
+3. The upload options.
+4. Get the file ID in the edit file URL
 
 == Wishlist / Coming attractons ==
 

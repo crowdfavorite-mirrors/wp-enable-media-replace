@@ -3,7 +3,7 @@
 Plugin Name: Enable Media Replace
 Plugin URI: http://www.mansjonasson.se/enable-media-replace
 Description: Enable replacing media files by uploading a new file in the "Edit Media" section of the WordPress Media Library.
-Version: 2.9
+Version: 2.9.2
 Author: Måns Jonasson
 Author URI: http://www.mansjonasson.se
 
@@ -156,6 +156,20 @@ function emr_get_modified_date($atts) {
 	return $content;
 
 }
+
+// Add Last replaced by EMR plugin in the media edit screen metabox - Thanks Jonas Lundman (http://wordpress.org/support/topic/add-filter-hook-suggestion-to)
+function ua_admin_date_replaced_media_on_edit_media_screen() {
+	if( !function_exists( 'enable_media_replace' ) ) return;
+	global $post;
+	$id = $post->ID;
+	$shortcode = "[file_modified id=$id]";
+	?>
+	<div class="misc-pub-section curtime">
+		<span id="timestamp"><?php _e( 'Revised', 'enable-media-replace' ); ?>: <b><?php echo do_shortcode($shortcode); ?></b></span>
+	</div>
+	<?php
+}
+add_action( 'attachment_submitbox_misc_actions', 'ua_admin_date_replaced_media_on_edit_media_screen', 91 );
 
 
 ?>

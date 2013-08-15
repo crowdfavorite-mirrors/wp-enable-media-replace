@@ -101,6 +101,8 @@ if (is_uploaded_file($_FILES["userfile"]["tmp_name"])) {
 		// Make thumb and/or update metadata
 		wp_update_attachment_metadata( (int) $_POST["ID"], wp_generate_attachment_metadata( (int) $_POST["ID"], $current_file ) );
 
+		// Trigger possible updates on CDN and other plugins 
+		update_attached_file( (int) $_POST["ID"], $current_file);
 	}
 
 	else {
@@ -150,6 +152,9 @@ if (is_uploaded_file($_FILES["userfile"]["tmp_name"])) {
 
 			mysql_query("UPDATE $table_name SET post_content = '$post_content' WHERE ID = {$rows["ID"]}");
 		}
+		
+		// Trigger possible updates on CDN and other plugins 
+		update_attached_file( (int) $_POST["ID"], $new_file);
 
 	}
 
@@ -157,7 +162,7 @@ if (is_uploaded_file($_FILES["userfile"]["tmp_name"])) {
 	$returnurl = get_bloginfo("wpurl") . "/wp-admin/post.php?post={$_POST["ID"]}&action=edit&message=1";
 	
 	// Execute hook actions - thanks rubious for the suggestion!
-	do_action("enable-media-replace-upload-done", ($new_guid ? $new_guid : $current_guid));
+	if (isset($new_guid)) { do_action("enable-media-replace-upload-done", ($new_guid ? $new_guid : $current_guid)); }
 	
 } else {
 	//TODO Better error handling when no file is selected.
@@ -171,4 +176,4 @@ if (FORCE_SSL_ADMIN) {
 
 //save redirection
 wp_redirect($returnurl);
-?>
+?>	

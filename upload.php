@@ -40,6 +40,9 @@ function emr_delete_current_files($current_file) {
 			foreach($metadata["sizes"] AS $thissize) {
 				// Get all filenames and do an unlink() on each one;
 				$thisfile = $thissize["file"];
+				// Create array with all old sizes for replacing in posts later
+				$oldfilesAr[] = $thisfile;
+				// Look for files and delete them
 				if (strlen($thisfile)) {
 					$thisfile = $current_path . "/" . $thissize["file"];
 					if (file_exists($thisfile)) {

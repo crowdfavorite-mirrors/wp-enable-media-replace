@@ -37,6 +37,10 @@ If you want more control over the format used to display the time, you can use t
 
 == Changelog ==
 
+= 2.9.5 =
+* Bug fix for the short code displaying the modification date of a file
+* Updated all database queries in preparation for WP 3.9
+
 = 2.9.4 =
 * Bug fix for timezone changes in WordPress
 * Minor UI change to inform the user about what actually happens when replacing an image and using a new file name

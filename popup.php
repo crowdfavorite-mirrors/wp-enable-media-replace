@@ -19,7 +19,7 @@ $table_name = $wpdb->prefix . "posts";
 
 $sql = "SELECT guid, post_mime_type FROM $table_name WHERE ID = " . (int) $_GET["attachment_id"];
 
-list($current_filename, $current_filetype) = mysql_fetch_array(mysql_query($sql));
+list($current_filename, $current_filetype) = $wpdb->get_row($sql, ARRAY_N);
 
 $current_filename = substr($current_filename, (strrpos($current_filename, "/") + 1));
 
